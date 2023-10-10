@@ -1,6 +1,4 @@
 # This project excludes
-fyp_env
-FollowYourPose
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
