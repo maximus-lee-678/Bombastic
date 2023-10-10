@@ -36,14 +36,18 @@ A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://gi
 
 * **Local (Windows)**
 
-1. Download `Python 3.8 <https://www.python.org/downloads/release/python-380/>`_.
-2. Run batch file to install virtual environments and create virtual environment.
-3. WIP
+1. Download and install `Python 3.8 <https://www.python.org/downloads/release/python-380/>`_.
+2. Run batch file at **other_files/batch_files/create_venv.bat** to initialise virtual environment.
 
 .. code-block:: console
 
-  create_venv.bat
+  other_files/batch_files/create_venv.bat
 
+3. To launch Jupyter Notebook in your browser, run **demos/demo_local_windows_start.bat**
+
+.. code-block:: console
+
+  demos/demo_local_windows_start.bat
 
 ⭐ Special Thanks
 ------------------
