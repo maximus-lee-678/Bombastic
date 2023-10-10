@@ -1,12 +1,12 @@
-pretrained_model_path: "./checkpoints/stable-diffusion-v1-4"
-output_dir: "output"
+pretrained_model_path: /content/FollowYourPose/checkpoints/stable-diffusion-v1-4
+output_dir: /content/custom_model/<model_name>
 
 train_data:
-  video_path: "no path"
+  video_path: /content/training_content/<dataset_folder>
   prompt: "None"
   n_sample_frames: 12
-  width: 512
-  height: 512
+  width: 256
+  height: 256
   sample_start_idx: 0
   sample_frame_rate: 4
   dataset_set: "train"
@@ -26,10 +26,9 @@ validation_data:
   num_inv_steps: 50
   dataset_set: "val"
 
-
 learning_rate: 3e-5
 train_batch_size: 1
-max_train_steps: 5000
+max_train_steps: 5
 checkpointing_steps: 1000
 validation_steps: 100
 trainable_modules:
@@ -37,11 +36,10 @@ trainable_modules:
   - "attn2.to_q"
   - "attn_temp"
   - "conv_temporal"
-skeleton_path: './pose_example/vis_kun_pose2.mov'
-
+skeleton_path: "./pose_example/vis_kun_pose2.mov"
 
 seed: 33
-mixed_precision: 'no'
+mixed_precision: "no"
 use_8bit_adam: False
 gradient_checkpointing: False
 enable_xformers_memory_efficient_attention: True

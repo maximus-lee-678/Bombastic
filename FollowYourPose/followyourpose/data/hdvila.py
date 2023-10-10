@@ -32,8 +32,8 @@ class HDVilaDataset(Dataset):
     """
     def __init__(self,
                 video_path,
-                width=512,
-                height=512,
+                width=256,
+                height=256,
                 n_sample_frames=8,
                 dataset_set="train",
                 prompt=None,
@@ -50,13 +50,9 @@ class HDVilaDataset(Dataset):
             pass
         print('dataset rank:', global_rank, ' / ',all_rank, ' ')
         
-        self.data_dir = 'Your dataset path'
-        if dataset_set=='train':
-            self.text_name = 'caption_rm2048_train.csv'
-        else:
-            self.text_name = 'caption_2048_val_new.csv'
+        self.data_dir = video_path
+        self.text_name = 'metadata.tsv'
         self.meta_path = os.path.join(self.data_dir, self.text_name)
-
         
         spatial_transform = 'resize_center_crop'
         resolution=width
@@ -66,11 +62,8 @@ class HDVilaDataset(Dataset):
         fps_max=None
         load_resize_keep_ratio=False
         
-        
-        
         self.global_rank = global_rank
         self.all_rank = all_rank
-        # self.subsample = subsample
         self.video_length = video_length
         self.resolution = [resolution, resolution] if isinstance(resolution, int) else resolution
         self.frame_stride = sample_frame_rate
@@ -105,8 +98,8 @@ class HDVilaDataset(Dataset):
         count=-1
         total_count = 8854264 #8856312 - 2048
 
-        with open(caption_path, 'r',encoding="utf-8") as csvfile: #41s
-            reader = csv.DictReader(csvfile)
+        with open(caption_path, 'r',encoding="utf-8") as tsvfile: #41s
+            reader = csv.DictReader(tsvfile, delimiter='\t')
             for row in reader:
                 if row['clip_id'] != last_clip_id:
                     count+=1
@@ -114,7 +107,7 @@ class HDVilaDataset(Dataset):
                         break
                     last_clip_id = row['clip_id']
                     if count % self.all_rank == self.global_rank:
-                        self.metadata.append([('%02d'%int(row['part_id']))+row['clip_id']]) 
+                        self.metadata.append([f"{row['part_id']}/{row['clip_id']}"]) 
                         self.metadata[-1].append([row['caption']])
                 else:
                     if count % self.all_rank == self.global_rank:
@@ -124,9 +117,7 @@ class HDVilaDataset(Dataset):
 
     
     def _get_video_path(self, sample):
-        part_id = int(sample[0][:2])
-        clip_id = sample[0][2:]
-        video_path = os.path.join(self.data_dir,'part_%d' % part_id, 'video_clips', clip_id)
+        video_path = os.path.join(self.data_dir, sample[0])
         return video_path
     
     def __getitem__(self, index):
@@ -197,17 +188,17 @@ class HDVilaDataset(Dataset):
         fps_clip = fps_ori // self.frame_stride
         if self.fps_max is not None and fps_clip > self.fps_max:
             fps_clip = self.fps_max
-        
-        # caption index
-        middle_idx = (rand_idx + self.video_length /2 )*fs
-        big_cap_idx = (middle_idx // 64 +1) *64
-        small_cap_idx = (middle_idx // 64) *64
-        if big_cap_idx >= allf or ((big_cap_idx-middle_idx) >= (small_cap_idx-middle_idx)):
-            cap_idx = small_cap_idx
-        else:
-            cap_idx = big_cap_idx
+
+        # caption index                
+        # middle_idx = (rand_idx + self.video_length /2 )*fs
+        # big_cap_idx = (middle_idx // 64 +1) *64
+        # small_cap_idx = (middle_idx // 64) *64
+        # if big_cap_idx >= allf or ((big_cap_idx-middle_idx) >= (small_cap_idx-middle_idx)):
+        #     cap_idx = small_cap_idx
+        # else:
+        #     cap_idx = big_cap_idx
         # print(middle_idx, small_cap_idx, big_cap_idx,cap_idx)
-        caption = sample[1][int(cap_idx//64)]
+        caption = sample[1][0]
 
         frames = frames.permute(1,0,2,3)
         skeleton_final = torch.zeros_like(frames).byte()
@@ -219,5 +210,3 @@ class HDVilaDataset(Dataset):
     
     def __len__(self):
         return len(self.metadata)
-        # return 1
-
