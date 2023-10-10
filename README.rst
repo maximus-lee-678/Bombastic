@@ -29,7 +29,7 @@ A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://gi
 * **Google Colab**
 
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
-  :target: http://google.com
+  :target: https://colab.research.google.com/github/maximus-lee-678/ict3104_team_05/blob/main/demos/demo_colab.ipynb
   :alt: Run in Colab
 
 |
