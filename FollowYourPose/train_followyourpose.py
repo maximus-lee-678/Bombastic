@@ -40,8 +40,6 @@ def main(
     pretrained_model_path: str,
     output_dir: str,
     train_data: Dict,
-    validation_data: Dict,
-    validation_steps: int = 100,
     trainable_modules: Tuple[str] = (
         "attn1.to_q",
         "attn2.to_q",
@@ -60,7 +58,6 @@ def main(
     max_grad_norm: float = 1.0,
     gradient_accumulation_steps: int = 1,
     gradient_checkpointing: bool = True,
-    checkpointing_steps: int = 500,
     resume_from_checkpoint: Optional[str] = None,
     mixed_precision: Optional[str] = "fp16",
     use_8bit_adam: bool = False,
@@ -161,15 +158,6 @@ def main(
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=train_batch_size
     )
-
-    # Get the validation pipeline
-    validation_pipeline = FollowYourPosePipeline(
-        vae=vae, text_encoder=text_encoder, tokenizer=tokenizer, unet=unet,
-        scheduler=DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
-    )
-    validation_pipeline.enable_vae_slicing()
-    ddim_inv_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder='scheduler')
-    ddim_inv_scheduler.set_timesteps(validation_data.num_inv_steps)
 
     # Scheduler
     lr_scheduler = get_scheduler(
@@ -308,37 +296,6 @@ def main(
                 global_step += 1
                 accelerator.log({"train_loss": train_loss}, step=global_step)
                 train_loss = 0.0
-
-                if global_step % checkpointing_steps == 0:
-                    if accelerator.is_main_process:
-                        save_path = os.path.join(output_dir, f"checkpoint-{global_step}")
-                        accelerator.save_state(save_path)
-                        logger.info(f"Saved state to {save_path}")
-
-                if global_step % validation_steps == 0:
-                    if accelerator.is_main_process:
-                        samples = []
-                        generator = torch.Generator(device=latents.device)
-                        generator.manual_seed(seed)
-
-                        ddim_inv_latent = None
-                        if validation_data.use_inv_latent:
-                            inv_latents_path = os.path.join(output_dir, f"inv_latents/ddim_latent-{global_step}.pt")
-                            ddim_inv_latent = ddim_inversion(
-                                validation_pipeline, ddim_inv_scheduler, video_latent=latents,
-                                num_inv_steps=validation_data.num_inv_steps, prompt="")[-1].to(weight_dtype)
-                            torch.save(ddim_inv_latent, inv_latents_path)
-
-                        for idx, prompt in enumerate(validation_data.prompts):
-                            sample = validation_pipeline(prompt, generator=generator, latents=ddim_inv_latent,
-                                                        skeleton_path=skeleton_path,
-                                                        **validation_data).videos
-                            save_videos_grid(sample, f"{output_dir}/samples/sample-{global_step}/{prompt}.gif")
-                            samples.append(sample)
-                        samples = torch.concat(samples)
-                        save_path = f"{output_dir}/samples/sample-{global_step}.gif"
-                        save_videos_grid(samples, save_path)
-                        logger.info(f"Saved samples to {save_path}")
 
             logs = {"step_loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0]}
             progress_bar.set_postfix(**logs)
