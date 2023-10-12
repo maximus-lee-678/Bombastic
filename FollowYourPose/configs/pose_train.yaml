@@ -3,13 +3,9 @@ output_dir: /content/custom_model/<model_name>
 
 train_data:
   video_path: /content/training_content/<dataset_folder>
-  prompt: "None"
   n_sample_frames: 11
   width: 512
-  height: 512
-  sample_start_idx: 0
   sample_frame_rate: 4
-  dataset_set: "train"
 
 learning_rate: 3e-5
 train_batch_size: 1
@@ -19,7 +15,6 @@ trainable_modules:
   - "attn2.to_q"
   - "attn_temp"
   - "conv_temporal"
-skeleton_path: "./pose_example/vis_kun_pose2.mov"
 
 seed: 33
 mixed_precision: "no"

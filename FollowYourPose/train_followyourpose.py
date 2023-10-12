@@ -1,5 +1,4 @@
 import argparse
-import datetime
 import logging
 import inspect
 import math
@@ -16,7 +15,7 @@ import transformers
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import set_seed
-from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler
+from diffusers import AutoencoderKL, DDPMScheduler
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version
 from diffusers.utils.import_utils import is_xformers_available
@@ -26,7 +25,6 @@ from transformers import CLIPTextModel, CLIPTokenizer
 from followyourpose.models.unet import UNet3DConditionModel
 from followyourpose.data.hdvila import HDVilaDataset
 from followyourpose.pipelines.pipeline_followyourpose import FollowYourPosePipeline
-from followyourpose.util import save_videos_grid, ddim_inversion
 from einops import rearrange
 
 
@@ -48,22 +46,20 @@ def main(
     train_batch_size: int = 1,
     max_train_steps: int = 500,
     learning_rate: float = 3e-5,
-    scale_lr: bool = False,
-    lr_scheduler: str = "constant",
-    lr_warmup_steps: int = 0,
-    adam_beta1: float = 0.9,
-    adam_beta2: float = 0.999,
-    adam_weight_decay: float = 1e-2,
-    adam_epsilon: float = 1e-08,
+    scale_lr: bool = False, # Scales the learning rate based on train_batch_size, gradient_accumulation_steps
+    lr_scheduler: str = "constant", # Change if learning rate is not linear
+    lr_warmup_steps: int = 0, 
+    adam_beta1: float = 0.9, # Affected by use_8bit_adam
+    adam_beta2: float = 0.999, # Affected by use_8bit_adam
+    adam_weight_decay: float = 1e-2, # Affected by use_8bit_adam
+    adam_epsilon: float = 1e-08, # Affected by use_8bit_adam
     max_grad_norm: float = 1.0,
     gradient_accumulation_steps: int = 1,
     gradient_checkpointing: bool = True,
-    resume_from_checkpoint: Optional[str] = None,
     mixed_precision: Optional[str] = "fp16",
     use_8bit_adam: bool = False,
     enable_xformers_memory_efficient_attention: bool = True,
-    seed: Optional[int] = None,
-    skeleton_path: Optional[str] = None,
+    seed: Optional[int] = None
 ):
     *_, config = inspect.getargvalues(inspect.currentframe())
 
@@ -207,23 +203,6 @@ def main(
     global_step = 0
     first_epoch = 0
 
-    # Potentially load in the weights and states from a previous save
-    if resume_from_checkpoint:
-        if resume_from_checkpoint != "latest":
-            path = os.path.basename(resume_from_checkpoint)
-        else:
-            # Get the most recent checkpoint
-            dirs = os.listdir(output_dir)
-            dirs = [d for d in dirs if d.startswith("checkpoint")]
-            dirs = sorted(dirs, key=lambda x: int(x.split("-")[1]))
-            path = dirs[-1]
-        accelerator.print(f"Resuming from checkpoint {path}")
-        accelerator.load_state(os.path.join(output_dir, path))
-        global_step = int(path.split("-")[1])
-
-        first_epoch = global_step // num_update_steps_per_epoch
-        resume_step = global_step % num_update_steps_per_epoch
-
     # Only show the progress bar once on each machine.
     progress_bar = tqdm(range(global_step, max_train_steps), disable=not accelerator.is_local_main_process)
     progress_bar.set_description("Steps")
@@ -232,11 +211,6 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
-            # Skip steps until we reach the resumed step
-            if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
-                if step % gradient_accumulation_steps == 0:
-                    progress_bar.update(1)
-                continue
 
             with accelerator.accumulate(unet):
                 # Convert videos to latent space
@@ -297,7 +271,7 @@ def main(
                 accelerator.log({"train_loss": train_loss}, step=global_step)
                 train_loss = 0.0
 
-            logs = {"step_loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0]}
+            logs = {"step_loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0], "test": "Test"}
             progress_bar.set_postfix(**logs)
 
             if global_step >= max_train_steps:
