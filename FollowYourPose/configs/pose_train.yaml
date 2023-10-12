@@ -1,23 +1,20 @@
-pretrained_model_path: /content/FollowYourPose/checkpoints/stable-diffusion-v1-4
-output_dir: /content/custom_model/<model_name>
-
-train_data:
-  video_path: /content/training_content/<dataset_folder>
-  n_sample_frames: 11
-  width: 512
-  sample_frame_rate: 4
-
-learning_rate: 3e-5
-train_batch_size: 1
-max_train_steps: 5
-trainable_modules:
-  - "attn1.to_q"
-  - "attn2.to_q"
-  - "attn_temp"
-  - "conv_temporal"
-
-seed: 33
-mixed_precision: "no"
-use_8bit_adam: False
-gradient_checkpointing: True
-enable_xformers_memory_efficient_attention: True
+"pretrained_model_path": "/content/FollowYourPose/checkpoints/stable-diffusion-v1-4"
+"output_dir": "/content/custom_model/spencer3"
+"train_data":
+  "video_path": "/content/training_content/20231012_144400"
+  "n_sample_frames": !!int "11"
+  "width": !!int "512"
+  "sample_frame_rate": !!int "4"
+"learning_rate": !!float "3.0e-05"
+"train_batch_size": !!int "1"
+"max_train_steps": !!int "5"
+"trainable_modules":
+- "attn1.to_q"
+- "attn2.to_q"
+- "attn_temp"
+- "conv_temporal"
+"seed": !!int "33"
+"mixed_precision": "no"
+"use_8bit_adam": !!bool "false"
+"gradient_checkpointing": !!bool "true"
+"enable_xformers_memory_efficient_attention": !!bool "true"
