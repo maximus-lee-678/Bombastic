@@ -83,7 +83,7 @@ def main(
         # now = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
         # output_dir = os.path.join(output_dir, now)
         os.makedirs(output_dir, exist_ok=True)
-        # os.makedirs(f"{output_dir}/samples", exist_ok=True)
+        os.makedirs(f"{output_dir}/processed", exist_ok=True)
         # os.makedirs(f"{output_dir}/inv_latents", exist_ok=True)
         # OmegaConf.save(config, os.path.join(output_dir, 'config.yaml'))
 
