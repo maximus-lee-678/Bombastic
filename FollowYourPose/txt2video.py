@@ -1,36 +1,36 @@
 import argparse
 import datetime
-import logging
 import inspect
+import logging
 import math
 import os
-from typing import Dict, Optional, Tuple
-from omegaconf import OmegaConf
 import platform
+import sys
+from typing import Dict, Optional, Tuple
 
+import diffusers
 import torch
 import torch.nn.functional as F
 import torch.utils.checkpoint
-
-import diffusers
 import transformers
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import set_seed
-from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler
+from diffusers import AutoencoderKL, DDIMScheduler, DDPMScheduler
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version
 from diffusers.utils.import_utils import is_xformers_available
+from einops import rearrange
+from omegaconf import OmegaConf
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 
-from followyourpose.models.unet import UNet3DConditionModel
 from followyourpose.data.hdvila import HDVilaDataset
-from followyourpose.pipelines.pipeline_followyourpose import FollowYourPosePipeline
-from followyourpose.util import save_videos_grid, ddim_inversion
-from einops import rearrange
+from followyourpose.models.unet import UNet3DConditionModel
+from followyourpose.pipelines.pipeline_followyourpose import \
+    FollowYourPosePipeline
+from followyourpose.util import ddim_inversion, save_videos_grid
 
-import sys
 sys.path.append('FollowYourPose')
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
@@ -166,7 +166,7 @@ def main(
         now = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S.%f"))
         # print(now)
         for idx, prompt in enumerate(validation_data.prompts):
-            video_grid_string = f"{output_dir}/sample-{global_step}-{str(seed)}-{now}/{prompt}.gif" if platform.system() == 'Linux' else f"{output_dir}\sample-{global_step}-{str(seed)}-{now}\{prompt}.gif"
+            video_grid_string = f"{output_dir}/raw/{prompt}.gif" if platform.system() == 'Linux' else f"{output_dir}\raw\{prompt}.gif"
 
             sample = validation_pipeline(prompt, generator=generator, latents=ddim_inv_latent,
                                         skeleton_path=skeleton_path,
@@ -174,7 +174,7 @@ def main(
             save_videos_grid(sample, video_grid_string)
             samples.append(sample)
         samples = torch.concat(samples)
-        save_path = f"{output_dir}/sample-{global_step}-{str(seed)}-{now}.gif" if platform.system() == 'Linux' else f"{output_dir}\sample-{global_step}-{str(seed)}-{now}.gif"
+        save_path = f"{output_dir}/grid.gif" if platform.system() == 'Linux' else f"{output_dir}\grid.gif"
         save_videos_grid(samples, save_path)
         logger.info(f"Saved samples to {save_path}")
 
