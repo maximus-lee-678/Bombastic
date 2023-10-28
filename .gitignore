@@ -1,4 +1,8 @@
 # This project excludes
+/custom_model
+/inference_output
+/training_content
+/test_output
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
