@@ -37,13 +37,15 @@ A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://gi
 * **Local (Windows)**
 
 1. Download and install `Python 3.8 <https://www.python.org/downloads/release/python-380/>`_.
-2. Run batch file at **other_files/batch_files/create_venv.bat** to initialise virtual environment.
+2. Install ImageMagick. Installation instructions are at `link <https://github.com/maximus-lee-678/ict3104_team_05/tree/main/other_files/requirements/install_imagemagick.rst>`_.
+3. Install FFmpeg. Installation instructions are at `link <https://github.com/maximus-lee-678/ict3104_team_05/tree/main/other_files/requirements/install_ffmpeg.rst>`_.
+4. Run batch file at **other_files/batch_files/create_venv.bat** to initialise virtual environment.
 
 .. code-block:: console
 
   other_files/batch_files/create_venv.bat
 
-3. To launch Jupyter Notebook in your browser, run **demos/demo_local_windows_start.bat**
+5. To launch Jupyter Notebook in your browser, run **demos/demo_local_windows_start.bat**
 
 .. code-block:: console
 
@@ -54,3 +56,7 @@ A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://gi
 * `FollowYourPose <https://github.com/mayuelala/FollowYourPose>`_
 * `MMPose <https://github.com/open-mmlab/mmpose>`_
 * `Charades Dataset <https://prior.allenai.org/projects/charades>`_
+* `Sims4Action Dataset <https://github.com/aroitberg/sims4action>`_
+* `Windows Wrapper for bitsandbytes <https://github.com/jllllll/bitsandbytes-windows-webui>`_
+* `FFmpeg <https://www.ffmpeg.org/>`_
+* `ImageMagick <https://imagemagick.org/>`_
