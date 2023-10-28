@@ -7,6 +7,7 @@ import os
 import platform
 import sys
 from typing import Dict, Optional, Tuple
+from pathlib import Path
 
 import diffusers
 import torch
@@ -166,7 +167,8 @@ def main(
         now = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S.%f"))
         # print(now)
         for idx, prompt in enumerate(validation_data.prompts):
-            video_grid_string = f"{output_dir}/raw/{prompt}.gif" if platform.system() == 'Linux' else f"{output_dir}\raw\{prompt}.gif"
+            # video_grid_string = f"{output_dir}/raw/{prompt}.gif" if platform.system() == 'Linux' else f"{output_dir}\raw\{prompt}.gif"
+            video_grid_string = Path(f'{output_dir}/raw/{prompt}.gif')
 
             sample = validation_pipeline(prompt, generator=generator, latents=ddim_inv_latent,
                                         skeleton_path=skeleton_path,
@@ -174,7 +176,8 @@ def main(
             save_videos_grid(sample, video_grid_string)
             samples.append(sample)
         samples = torch.concat(samples)
-        save_path = f"{output_dir}/grid.gif" if platform.system() == 'Linux' else f"{output_dir}\grid.gif"
+        # save_path = f"{output_dir}/grid.gif" if platform.system() == 'Linux' else f"{output_dir}\grid.gif"
+        save_path = Path(f'{output_dir}/grid.gif')
         save_videos_grid(samples, save_path)
         logger.info(f"Saved samples to {save_path}")
 
