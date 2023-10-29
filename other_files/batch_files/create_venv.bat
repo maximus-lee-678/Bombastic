@@ -18,9 +18,6 @@ python -m pip install jupyter_contrib_nbextensions
 jupyter contrib nbextension install --sys-prefix
 python -m pip install jupyter_nbextensions_configurator
 jupyter nbextensions_configurator enable --sys-prefix
-:: themes: chesterish,grade3,gruvboxd,gruvboxl,monokai,oceans16,onedork,solarizedd,solarizedl
-python -m pip install jupyterthemes
-jt -t monokai
 python -m pip install -r ".\other_files\requirements\requirements_local_windows.txt"
 python -m mim install mmengine
 python -m mim install mmpose
