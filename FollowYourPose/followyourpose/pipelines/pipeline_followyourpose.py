@@ -420,7 +420,7 @@ class FollowYourPosePipeline(DiffusionPipeline):
     
     @torch.no_grad()
     def get_skeleton(self,skeleton_path, video_length=None, frame_skeleton_stride=None):
-        skeleton_start_end = list(range(0, video_length * frame_skeleton_stride, frame_skeleton_stride))
+        skeleton_start_end = list(range(frame_skeleton_stride, (video_length + 1) * frame_skeleton_stride), frame_skeleton_stride)
         self_transform = transforms.Compose([transforms.Resize(512),
                                         transforms_video.CenterCropVideo(512)])
         
