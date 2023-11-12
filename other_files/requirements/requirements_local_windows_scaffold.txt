@@ -2,13 +2,14 @@ ipykernel==6.26.0
 jupyter==1.0.0
 
 # Aligns with colab's versioning to resolve rendering differences
+notebook==6.4.12
+traitlets==5.9.0
+
 ipyevents==2.0.2
 ipyfilechooser==0.6.0
 ipyleaflet==0.17.4
 ipython==7.34.0
 ipython-genutils==0.2.0
 ipytree==0.2.2
-
-# Upgraded above colab's versioning to fix javascript error
-ipywidgets==8.0.4
-widgetsnbextension==4.0.0
+ipywidgets==7.7.1
+widgetsnbextension==3.6.6
