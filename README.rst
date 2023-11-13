@@ -42,17 +42,17 @@ A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://gi
 
 .. |demo link| image:: https://colab.research.google.com/assets/colab-badge.svg
   :target: https://colab.research.google.com/github/maximus-lee-678/ict3104_team_05/blob/main/demos/demo.ipynb
-  :alt: Run demo.ipynb in Colab
+  :alt: Run demo.ipynb in Google Colab
 
 .. |demo bombastic link| image:: https://colab.research.google.com/assets/colab-badge.svg
-  :target: https://colab.research.google.com/github/maximus-lee-678/ict3104_team_05/blob/main/demos/demo_colab_bombastic.ipynb
-  :alt: Run demo_colab_bombastic.ipynb in Colab
+  :target: https://colab.research.google.com/github/maximus-lee-678/ict3104_team_05/blob/main/demos/demo_bombastic.ipynb
+  :alt: Run demo_bombastic.ipynb in Google Colab
 
 **demo.ipynb**
 
    |demo link|
 
-**demo_colab_bombastic.ipynb**
+**demo_bombastic.ipynb**
 
    |demo bombastic link|
 
@@ -61,19 +61,24 @@ A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://gi
 * 🪟 **Local (Windows)**
 
 1. Download and install `Python 3.8 <https://www.python.org/downloads/release/python-380/>`_.
-2. Install ImageMagick. Installation instructions are at `link <https://github.com/maximus-lee-678/ict3104_team_05/tree/main/other_files/requirements/install_imagemagick.rst>`_.
-3. Install FFmpeg. Installation instructions are at `link <https://github.com/maximus-lee-678/ict3104_team_05/tree/main/other_files/requirements/install_ffmpeg.rst>`_.
-4. Run batch file at **other_files/batch_files/create_venv.bat** to initialise virtual environment.
+2. Install `git <https://git-scm.com/>`_, ensure LFS support is checked. 
+3. Install ImageMagick. Installation instructions are at `link <https://github.com/maximus-lee-678/ict3104_team_05/tree/main/other_files/requirements/install_imagemagick.rst>`_.
+4. Install FFmpeg. Installation instructions are at `link <https://github.com/maximus-lee-678/ict3104_team_05/tree/main/other_files/requirements/install_ffmpeg.rst>`_.
+5. Run batch file at **other_files/batch_files/create_venv.bat** to initialise virtual environment.
 
 .. code-block:: console
 
-  other_files/batch_files/create_venv.bat
+  cd other_files/batch_files && create_venv.bat
 
-5. To launch Jupyter Notebook in your browser, run **demos/demo_local_windows_start.bat**. Defaults to opening **demo.ipynb**.
+6. To launch Jupyter Notebook in your browser, run **demos/local_windows_demo.bat** or **demos/local_windows_demo_bombastic.bat**.
 
 .. code-block:: console
 
-  demos/demo_local_windows_start.bat
+  cd demos && local_windows_demo.bat
+
+.. code-block:: console
+
+  cd demos && local_windows_demo_bombastic.bat
 
 ⭐ Special Thanks
 ------------------
