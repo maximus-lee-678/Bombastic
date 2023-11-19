@@ -1,10 +1,15 @@
-ICT3104 Team 5
-==============
-💣
+ICT3104 Team 5 💣
+=================
+A Jupyter Notebook that combines the work of `FollowYourPose <https://github.com/mayuelala/FollowYourPose>`_ & `MMPose <https://github.com/open-mmlab/mmpose>`_.
 
-ℹ️ Description
---------------
-A Jupyter Notebook Wrapper that combines the work of `FollowYourPose <https://github.com/mayuelala/FollowYourPose>`_ & `MMPose <https://github.com/open-mmlab/mmpose>`_.
+* Dual platform support
+* Dynamic MMPose Inference
+* Streamlined FYP Inference with MMPose
+* Inference Output with customisable formatting (Stitch/Superimpose)
+* Inbuilt Stable Diffusion Model Fine-tuning
+* Trained Model Testing
+* Automatic Scoring using Euclidean Distance Normalisation & Manual Model Scoring System
+* Trained Model Testing results comparison/visualisation analysis
 
 👥 Team Members
 ----------------
