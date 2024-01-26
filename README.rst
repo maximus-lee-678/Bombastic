@@ -1,6 +1,6 @@
-ICT3104 Team 5 💣
+Bombastic 💣
 =================
-A Jupyter Notebook that combines the work of `FollowYourPose <https://github.com/mayuelala/FollowYourPose>`_ & `MMPose <https://github.com/open-mmlab/mmpose>`_.
+A Jupyter Notebook that combines the work of `FollowYourPose <https://github.com/mayuelala/FollowYourPose>`_ & `MMPose <https://github.com/open-mmlab/mmpose>`_. Originally developed under the project title **ict3104_team_05**, this project generates animated GIFs based on prompts.
 
 * Dual platform support
 * Dynamic MMPose Inference
